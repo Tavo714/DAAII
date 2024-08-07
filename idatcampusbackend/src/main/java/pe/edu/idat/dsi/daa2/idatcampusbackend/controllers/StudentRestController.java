@@ -48,8 +48,14 @@ public class StudentRestController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<StudentPageableResponse> getAllPageable(@RequestParam( required = false, defaultValue = "0") int pageNumber, @RequestParam(required = false, defaultValue = "10") int pageSize,@RequestParam( required = false, defaultValue = "asc") String direction, @RequestParam(required = false, defaultValue = "id") String columnOrder) {
-        StudentPageable pageable = new StudentPageable(pageNumber, pageSize, columnOrder, direction);
+    public ResponseEntity<StudentPageableResponse> getAllPageable(
+        @RequestParam( required = false, defaultValue = "0") int pageNumber, 
+        @RequestParam(required = false, defaultValue = "10") int pageSize,
+        @RequestParam( required = false, defaultValue = "asc") String direction, 
+        @RequestParam(required = false, defaultValue = "id") String columnOrder,
+        @RequestParam(required = false, defaultValue = "") String filter) 
+        {
+        StudentPageable pageable = new StudentPageable(pageNumber, pageSize, columnOrder, direction, filter);
         Page<Student> response = studentService.getAllPageable(pageable);
         
         if(response == null){

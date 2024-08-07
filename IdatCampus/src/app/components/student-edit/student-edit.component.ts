@@ -77,8 +77,6 @@ export class StudentEditComponent implements OnInit, AfterViewInit{
     updateStudent.username= this.student.username;
     updateStudent.state = '1'; 
 
-    console.log(updateStudent);
-
     this.studentService.update(updateStudent)
       .subscribe(
         response=>{

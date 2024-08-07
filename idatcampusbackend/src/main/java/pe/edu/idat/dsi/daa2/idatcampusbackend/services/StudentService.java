@@ -46,7 +46,7 @@ public class StudentService {
     public Page<Student> getAllPageable(StudentPageable pageable){
         Sort studentSorting = Sort.by(pageable.getDirection().equals("asc")? Direction.ASC:Direction.DESC,pageable.getColumn());
         Pageable studentPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), studentSorting);
-        return studentRepository.findAllPageableActiveStudents(studentPageable);
+        return studentRepository.findAllPageableActiveStudents(studentPageable, pageable.getFilter());
     }
 
     public Student insert(Student model){

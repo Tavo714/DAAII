@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSort, MatSortModule} from '@angular/material/sort';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -13,7 +13,7 @@ import { DeleteItemDialogComponent } from '../delete-item-dialog/delete-item-dia
 import { Item, StudentPage } from '../../models/student-page';
 import { StudentService } from '../../services/student.service';
 import { StudentSearchFilter } from '../../models/student-search-filter';
-import { catchError, merge, of, startWith, switchMap } from 'rxjs';
+import { catchError, fromEvent, merge, of, startWith, switchMap } from 'rxjs';
 
 
 
@@ -38,26 +38,30 @@ export class StudentsComponent implements OnInit, AfterViewInit{
 
   title= "Estudiantes"
   displayedColumns=['id','username','name','lastname','nid','email','actions'];
-  dataSource: MatTableDataSource<StudentData>;
+  dataSource: Item[];
   filter: StudentSearchFilter;
   isLoadingResults= false;
+  totalItems;
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild('input', {static: true}) filterInput: ElementRef | undefined;
 
 
   
 constructor(public dialog: MatDialog, private router: Router, private studentService: StudentService){
-  this.filter= new StudentSearchFilter(0,10,"id","asc");
-  this.dataSource = new MatTableDataSource([] as Item[]);
+  this.filter= new StudentSearchFilter(0,10,"id","asc","");
+  this.dataSource = [] as Item[];
+  this.totalItems= 0;
 }
   ngOnInit(): void {
     this.studentService.getAllPageable(this.filter)
       .subscribe(
         response=>{
           console.log(response.items);
-          this.dataSource.data= response.items;
+          this.totalItems= response.totalItems;
+          this.dataSource= response.items;
         },
         error =>{
           console.log("Ocurrio un error al recuperar los estudiantes =>",error);
@@ -66,29 +70,31 @@ constructor(public dialog: MatDialog, private router: Router, private studentSer
       )
   }
 
-ngAfterViewInit() {
-  this.dataSource.paginator = this.paginator!;
-  this.dataSource.sort = this.sort!;
+ngAfterViewInit() {  
 
-  this.dataSource.sort.sortChange.subscribe(()=>(this.dataSource.paginator!!.pageIndex=0));
-
-  merge(this.dataSource.sort.sortChange, this.dataSource.paginator.page)
+  merge(
+    this.sort!!.sortChange, 
+    this.paginator!!.page,
+    fromEvent(this.filterInput?.nativeElement, 'keyup')
+  )
   .pipe(
     startWith({}),
     switchMap(()=>{
       this.isLoadingResults=true;
 
-      this.filter.pageNumber= this.dataSource.paginator!!.pageIndex;
-      this.filter.pageSize= this.dataSource.paginator!!.pageSize;
+      this.filter.pageNumber= this.paginator!!.pageIndex;
+      this.filter.pageSize= this.paginator!!.pageSize;
       this.filter.column= this.sort!!.active;
+      this.filter.direction= this.sort!!.direction;
+      this.filter.filter= this.filterInput?.nativeElement.value.trim().toLowerCase();
 
       return this.studentService.getAllPageable(this.filter).pipe(catchError(()=>of({items:[] as Item[]} as StudentPage)))
 
     })
   )
   .subscribe(data=> {
-    console.log(data.items);    
-    this.dataSource.data=data.items;
+    this.totalItems=data.totalItems; 
+    this.dataSource=data.items;
   });
 
 }
@@ -111,35 +117,21 @@ deleteStudent(student: StudentData){
       if(result.action === 'cancel'){
         return;
       }
-      console.log(result);
-      console.log('Eliminar el siguiente estudiante');
-      console.log(student);
+      this.studentService.delete(student.id)
+      .subscribe(
+        response=>{
+          console.log('El usuario ha sido eliminado correctamente', response)
+          window.location.reload();          
+        },
+        error=>{
+          console.log('Error eliminando al usuario', error);
+        }
+      )
     });
 
     
   }
 
-populateStudents(){
-  let students: StudentData[] = [
-    {id: 6, name:'Karla', lastname: 'Lozada Mejia', nid: '36542768', phoneNumber:'555666777'} as StudentData
-    //new StudentData(1,"01","Julio","Leonardo","11122233","av. blablabla", "1"),
-    //new StudentData(1,"01","Julio","Leonardo","11122288","av. blablabla", "1"),
-    //new StudentData(1,"01","Julio","Leonardo","11122277","av. blablabla", "1"),
-    //new StudentData(1,"01","Julio","Leonardo","11122253","av. blablabla", "1"),
-    //new StudentData(1,"01","Julio","Leonardo","11122233","av. blablabla", "1"),
-    //new StudentData(1,"01","Julio","Leonardo","11122233","av. blablabla", "1"),
-    //new StudentData(1,"01","Julio","Leonardo","11122233","av. blablabla", "1")
-  ];
-  return students;
-}
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 
 }

@@ -24,13 +24,14 @@ export class StudentService {
   }
 
   getAllPageable(filter: StudentSearchFilter): Observable<StudentPage>{
-    let params = new HttpParams()
+    let filterParams = new HttpParams()
     .set('pageNumber', filter.pageNumber)
     .set('pageSize', filter.pageSize)
-    .set('column', filter.column)
-    .set('direction', filter.direction);
+    .set('columnOrder', filter.column)
+    .set('direction', filter.direction)
+    .set('filter', filter.filter);
 
-    return this.httpClient.get<StudentPage>(`${this.apiUrlBasePath}students/page`, {params: params});
+    return this.httpClient.get<StudentPage>(`${this.apiUrlBasePath}students/page`, {params: filterParams});
   }
 
   create(student: StudentData): Observable<StudentData>{
@@ -42,7 +43,7 @@ export class StudentService {
   }
 
   delete(id: number){
-    return this.httpClient.delete(`${this.apiUrlBasePath}students/${id}`);
+    return this.httpClient.delete(`${this.apiUrlBasePath}students/${id}`, {responseType: 'text'});
   }
 
 }

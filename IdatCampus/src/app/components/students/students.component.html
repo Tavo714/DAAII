@@ -13,48 +13,48 @@
 <div class="row">
     <mat-form-field class="col-12">
         <mat-label>Filtro de Busqueda</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Realice su busqueda por nombre, apellidos, entre otros datos" #input>
+        <input matInput placeholder="Realice su busqueda por nombre, apellidos, entre otros datos" #input>
       </mat-form-field>
       
       <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort>
+        <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
       
           <!-- ID Column -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header matSortDisableClear> ID </th>
             <td mat-cell *matCellDef="let row"> {{row.id}} </td>
           </ng-container>
       
           <!-- Progress Column -->
           <ng-container matColumnDef="username">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header matSortDisableClear> Usuario </th>
             <td mat-cell *matCellDef="let row"> {{row.username}} </td>
           </ng-container>
       
           <!-- Name Column -->
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombres </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header matSortDisableClear> Nombres </th>
             <td mat-cell *matCellDef="let row"> {{row.name}} </td>
           </ng-container>
       
           <!-- Fruit Column -->
           <ng-container matColumnDef="lastname">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header matSortDisableClear> Apellidos </th>
             <td mat-cell *matCellDef="let row"> {{row.lastname}} </td>
           </ng-container>
 
           <ng-container matColumnDef="nid">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> DNI </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header matSortDisableClear> DNI </th>
             <td mat-cell *matCellDef="let row"> {{row.nid}} </td>
           </ng-container>
 
           <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header matSortDisableClear> Email </th>
             <td mat-cell *matCellDef="let row"> {{row.email}} </td>
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </th>
+            <th mat-header-cell *matHeaderCellDef> Acciones </th>
             <td mat-cell *matCellDef="let row">
                 <div>
                 <button mat-icon-button aria-label="Editar Estudiante" (click)="editStudent(row)">
@@ -78,7 +78,7 @@
           </tr>
         </table>
       
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar pagina de estudiantes"></mat-paginator>
+        <mat-paginator [length]="totalItems" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar pagina de estudiantes"></mat-paginator>
       </div>
       
       

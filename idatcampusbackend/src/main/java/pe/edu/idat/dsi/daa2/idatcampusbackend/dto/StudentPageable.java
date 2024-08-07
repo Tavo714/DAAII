@@ -10,4 +10,5 @@ public class StudentPageable {
     private int pageSize;
     private String column;
     private String direction;
+    private String filter;
 }
