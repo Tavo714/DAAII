@@ -1,0 +1,46 @@
+<h4>{{title}}</h4>
+    <form [formGroup]="studentForm" (ngSubmit)="onStudentEditSubmit()">      
+  
+      <div class="row">
+        <mat-form-field class="col-12 col-sm-6 p-2" appearance="outline">
+          <mat-label>Usuario</mat-label>
+          <input matInput placeholder="Ingrese el Usuario" formControlName="username"  required />
+        </mat-form-field>
+
+        <mat-form-field class="col-12 col-sm-6 p-2" appearance="outline">
+          <mat-label>Clave</mat-label>
+          <input matInput [type]="'password'" placeholder="Ingrese la Clave" formControlName="password"  required />
+        </mat-form-field>       
+
+        <mat-form-field class="col-12 col-sm-6 p-2" appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput placeholder="Ingrese los nombres" formControlName="name" required />
+        </mat-form-field>
+  
+        <mat-form-field class="col-12 col-sm-6 p-2" appearance="outline">
+          <mat-label>Apellidos</mat-label>          
+          <input matInput placeholder="Ingrese los apellidos" formControlName="lastname" required />
+        </mat-form-field>  
+
+        <mat-form-field class="col-12 col-sm-6 p-2" appearance="outline">
+          <mat-label>DNI</mat-label>          
+          <input matInput placeholder="Ingrese el DNI" formControlName="nid" required />
+        </mat-form-field> 
+
+        <mat-form-field class="col-12 col-sm-6 p-2" appearance="outline">
+          <mat-label>Nro Telefono</mat-label>          
+          <input matInput [type]="'tel'" placeholder="Ingrese el Numero de Telefono" formControlName="phoneNumber" required />
+        </mat-form-field> 
+
+        <mat-form-field class="col-12 p-2" appearance="outline">
+          <mat-label>Correo Electronico</mat-label>          
+          <input matInput placeholder="correo.electronico@contoso.com" formControlName="email" required />
+        </mat-form-field>            
+      </div>
+      <div class="d-flex justify-content-end">  
+          <button class="m-2" mat-button [routerLink]="['/students']">Cancelar</button>
+          <button type="submit" class="mt-2 mb-2" mat-flat-button>Modificar Datos</button>
+      </div>
+    </form>
+ 
+  

@@ -1,0 +1,11 @@
+.spacer{
+    width: 32px;
+}
+
+.master-container{
+    height: calc(100% - 64px); //Para que tenga el tamaño total de la pantalla menos la diferencia del nav
+}
+
+.master-drawer{
+    width: 250px;
+}
