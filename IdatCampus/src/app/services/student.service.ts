@@ -15,12 +15,17 @@ export class StudentService {
 
   constructor(private httpClient: HttpClient) {
     this.httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'})
+      headers: new HttpHeaders(
+        {
+          'Authorization': 'Basic YWRtaW46MDEyMzQ1Njc= ',
+          'Content-Type': 'application/json'
+        }
+      )
     }
    }
 
   getById(id: string): Observable<StudentData>{
-    return this.httpClient.get<StudentData>(`${this.apiUrlBasePath}students/${id}`)
+    return this.httpClient.get<StudentData>(`${this.apiUrlBasePath}students/${id}`, this.httpOptions)
   }
 
   getAllPageable(filter: StudentSearchFilter): Observable<StudentPage>{
@@ -31,7 +36,7 @@ export class StudentService {
     .set('direction', filter.direction)
     .set('filter', filter.filter);
 
-    return this.httpClient.get<StudentPage>(`${this.apiUrlBasePath}students/page`, {params: filterParams});
+    return this.httpClient.get<StudentPage>(`${this.apiUrlBasePath}students/page`, {params: filterParams, headers: this.httpOptions.headers});
   }
 
   create(student: StudentData): Observable<StudentData>{
@@ -39,11 +44,11 @@ export class StudentService {
   }
 
   update(student: StudentData): Observable<StudentData>{
-    return this.httpClient.put<StudentData>(`${this.apiUrlBasePath}students/${student.id}`,student)
+    return this.httpClient.put<StudentData>(`${this.apiUrlBasePath}students/${student.id}`,student, this.httpOptions)
   }
 
   delete(id: number){
-    return this.httpClient.delete(`${this.apiUrlBasePath}students/${id}`, {responseType: 'text'});
+    return this.httpClient.delete(`${this.apiUrlBasePath}students/${id}`, {responseType: 'text', headers: this.httpOptions.headers});
   }
 
 }
