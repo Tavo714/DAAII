@@ -1,4 +1,5 @@
-<mat-toolbar class="d-flex justify-content-between mat-elevation-z4">
+@if(isLogged){
+  <mat-toolbar class="d-flex justify-content-between mat-elevation-z4">
     <button mat-icon-button  aria-label="Show Menu" (click)="drawer.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
@@ -9,7 +10,7 @@
             <mat-icon>person</mat-icon>
           </button>
           <span class="spacer"></span>
-          <button mat-icon-button  aria-label="Opcion Cerrar Sesion">
+          <button mat-icon-button  aria-label="Opcion Cerrar Sesion" (click)="logout()">
             <mat-icon>logout</mat-icon>
           </button>
     </div>
@@ -28,14 +29,16 @@
       </mat-selection-list>      
     </mat-drawer>
   
-    <div class="container">
-        
-        <router-outlet />
-      
+    <div class="container">        
+        <router-outlet />      
     </div>
   
   </mat-drawer-container>
-  
-  
+}
 
+@else{
+  <div class="container">        
+    <router-outlet />  
+</div>
 
+}

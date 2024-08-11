@@ -108,7 +108,8 @@ deleteStudent(student: StudentData){
       width: '300px',
       data: {
         title: 'Eliminar Estudiante',
-        message: `Esta seguro que desea eliminar el registro del estudiante ${student.name} ${student.lastname}?`
+        message: `Esta seguro que desea eliminar el registro del estudiante ${student.name} ${student.lastname}?`,
+        actionDescription: 'Eliminar'
       }
     });
 

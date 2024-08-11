@@ -4,6 +4,7 @@ import { StudentSearchFilter } from '../models/student-search-filter';
 import { StudentData } from '../models/student-data';
 import { Observable } from 'rxjs';
 import { StudentPage } from '../models/student-page';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,11 @@ export class StudentService {
   apiUrlBasePath = "http://localhost:8080/api/v1/";
   httpOptions;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private authService: AuthService) {
     this.httpOptions = {
       headers: new HttpHeaders(
         {
-          'Authorization': 'Basic YWRtaW46MDEyMzQ1Njc= ',
+          'Authorization': `Basic ${this.authService.getToken()}`,
           'Content-Type': 'application/json'
         }
       )

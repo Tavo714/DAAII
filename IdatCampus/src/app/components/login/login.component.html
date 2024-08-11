@@ -1,0 +1,40 @@
+
+<div class="d-flex justify-content-center pt-5">
+    <div style="max-width: 350px;">
+        <mat-card [class.mat-elevation-z8]="true">
+            <mat-card-header>
+              <mat-card-title>{{title}}</mat-card-title>
+              <mat-card-subtitle>Ingrese sus credenciales</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="p-3">
+                    <form [formGroup]="loginForm" (ngSubmit)="loginSubmit()">      
+          
+                        <div class="row">
+                          <mat-form-field class="col-12 px-4" appearance="outline">
+                            <mat-label>Usuario</mat-label>
+                            <input matInput placeholder="Ingrese el Usuario" formControlName="username"  required />
+                          </mat-form-field>
+                  
+                          <mat-form-field class="col-12 px-4" appearance="outline">
+                            <mat-label>Clave</mat-label>
+                            <input matInput [type]="'password'" placeholder="Ingrese la Clave" formControlName="password"  required />
+                          </mat-form-field>       
+                         
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="m-4" mat-flat-button>Iniciar Sesion</button>
+                        </div>
+                      </form>
+                </div>
+              
+              </mat-card-content>
+              
+          </mat-card>
+    </div>
+</div>
+
+
+
+
+    
